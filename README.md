@@ -48,12 +48,10 @@ Frames are sorted by the numeric suffix extracted from the filename.
 
 ## The main production process of our dataset:
 1. **Collect clean videos** and extract frames as ground truth.
-2. **Render a snow layer** per frame by sampling snow particles (random positions, sizes, and opacities). Particles can be rasterized as blurred disks / Gaussian blobs.
-3. **Generate streak-like patterns** by applying motion blur to the snow layer (random direction and length). Parameters may vary over time to mimic temporal changes.
-4. **Introduce photometric variations**, e.g., brightness jitter and small color deviations around white, to avoid overly uniform patterns.
-5. **Composite** the snow layer onto clean frames using alpha blending. In heavier snow, an additional mild veil/scattering term can be used to approximate global accumulation:
-   - `I = (1 - α) * J + α * S`, where `J` is the clean frame and `S` is the rendered snow layer.
-6. Use `I` as input and `J` as ground truth.
+2. **Render a snow layer** for each frame by sampling snow particles with random spatial locations, sizes, and opacities. Particles can be rasterized as blurred disks, Gaussian blobs, or a combination of both.
+3. **Generate streak-like patterns** by applying motion blur to the snow layer with randomly sampled directions and lengths. The blur parameters may vary across frames to mimic temporal dynamics, or remain fixed.
+4. **Introduce photometric variations**, such as brightness jitter and slight color deviations around white, to reduce overly regular or uniform patterns.
+5. **Composite** the snow layer onto the clean frames using alpha blending. Under heavier snow conditions, an additional mild veil or scattering term can be applied to approximate global accumulation effects.
 
 
 ---
