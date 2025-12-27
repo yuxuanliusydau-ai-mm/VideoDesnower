@@ -1,0 +1,117 @@
+# Video Desnower: Adaptive Feature Fusion for Video Desnowing with Deformable Convolution and KNN Point Cloud Transformer
+
+This work represents an early-stage and relatively preliminary exploration by the authors into computer vision and image restoration.
+
+
+---
+
+## Installation
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Datasets
+
+### Download
+
+Our dataset archive is available at:
+
+```text
+https://www.dropbox.com/scl/fi/ycu17t6gnbf650u292duj/dataset.zip?rlkey=z3wehcxfl9x2l6locezbeag75&st=kgweswfk&dl=0
+```
+
+
+### Expected folder structure
+
+The loader assumes paired folders with identical video indices and frame counts:
+
+```
+INPUT_ROOT/
+  0/
+    *_input_0.png
+    *_input_1.png
+    ...
+  1/
+    ...
+GT_ROOT/
+  0/
+    *_gt_0.png
+    *_gt_1.png
+    ...
+```
+
+Frames are sorted by the numeric suffix extracted from the filename.
+
+## The main production process of our dataset:
+1. **Collect clean videos** and extract frames as ground truth.
+2. **Render a snow layer** per frame by sampling snow particles (random positions, sizes, and opacities). Particles can be rasterized as blurred disks / Gaussian blobs.
+3. **Generate streak-like patterns** by applying motion blur to the snow layer (random direction and length). Parameters may vary over time to mimic temporal changes.
+4. **Introduce photometric variations**, e.g., brightness jitter and small color deviations around white, to avoid overly uniform patterns.
+5. **Composite** the snow layer onto clean frames using alpha blending. In heavier snow, an additional mild veil/scattering term can be used to approximate global accumulation:
+   - `I = (1 - α) * J + α * S`, where `J` is the clean frame and `S` is the rendered snow layer.
+6. Use `I` as input and `J` as ground truth.
+
+
+---
+
+## Training
+
+```bash
+python train.py   --noisy-root   --gt-root /path/to/GT_ROOT   --epochs    --batch-size    --frames    --image-size 
+```
+
+
+---
+
+## Test (save predicted frames)
+
+```bash
+python test.py   --ckpt checkpoints/latest.pt   --noisy-root   --out-root output_frames   --frames    --image-size 
+```
+
+The script writes per-video folders into `output_frames/`.
+
+---
+
+## Evaluation (PSNR / SSIM)
+
+
+```bash
+python eval.py   --pred-root output_frames   --gt-root /path/to/GT_ROOT   --image-size 224
+```
+
+---
+
+## Compose side-by-side videos (input vs output)
+
+A script is provided to concatenate input and predicted frames horizontally and write AVI videos:
+
+```bash
+python tools/make_video.py   --input-root input_frames   --output-root output_frames   --out-dir video   --num-videos 20   --fps 100   --size 224
+```
+
+---
+
+## Reference
+
+If you use this code or dataset in academic work, please cite:
+
+```bibtex
+@ARTICLE{10606460,
+  author={Li, Yuxuan and Dai, Lin},
+  journal={IEEE Access}, 
+  title={Video Desnower: An Adaptive Feature Fusion Understanding Video Desnowing Model With Deformable Convolution and KNN Point Cloud Transformer}, 
+  year={2024},
+  volume={12},
+  number={},
+  pages={104354-104366},
+  keywords={Convolutional neural networks;Adaptation models;Nearest neighbor methods;Task analysis;Computational modeling;Deep learning;Computer vision;Videos;Snow;Computer vision;deep learning;video desnowing;feature fusion understanding},
+  doi={10.1109/ACCESS.2024.3432709}
+}
+```
+
+---
+
