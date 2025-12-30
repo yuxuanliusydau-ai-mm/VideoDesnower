@@ -6,6 +6,12 @@ yuxuan.li.usyd.au@gmail.com
 
 ---
 
+## Video Desnowing Results
+
+![Desnowing result](0.gif)
+![Desnowing result](3.gif)
+
+---
 ## Installation
 
 ```bash
