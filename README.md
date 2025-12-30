@@ -4,6 +4,11 @@
 This repository reflects an early attempt in our exploration of image restoration.  After moving on to a new stage of research, the first author reorganized the relevant projects, and we share this version for reference.  We hope the released dataset and the auxiliary adaptive design (an extra weighting network for fusion) may provide some useful hints for related studies. For questions related to this repository, please use the following email address for correspondence:
 yuxuan.li.usyd.au@gmail.com
 
+## Video Desnowing Results
+
+<video src="0.mp4" controls width="100%"></video>
+<video src="3.mp4" controls width="100%"></video>
+
 ---
 
 ## Installation
